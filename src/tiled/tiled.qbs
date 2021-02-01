@@ -453,6 +453,8 @@ QtGuiApplication {
         "stampbrush.h",
         "stylehelper.cpp",
         "stylehelper.h",
+        "swaptilelocation.cpp",
+        "swaptilelocation.h",
         "swaptiles.cpp",
         "swaptiles.h",
         "tabbar.cpp",

@@ -421,6 +421,15 @@ void TilesetDocument::swapTileObjectGroup(Tile *tile, std::unique_ptr<ObjectGrou
         emit mapDocument->tileObjectGroupChanged(tile);
 }
 
+void TilesetDocument::swapTiles(Tile *tile1, Tile *tile2)
+{
+    Q_ASSERT(tile1->tileset() == mTileset.data());
+    Q_ASSERT(tile2->tileset() == mTileset.data());
+
+    mTileset->swapTiles(tile1->id(), tile2->id());
+    emit tilesetChanged(mTileset.data());
+}
+
 void TilesetDocument::checkIssues()
 {
     // Clear any previously found issues in this document

@@ -126,6 +126,7 @@ private:
     void selectWangSetImage();
     void selectWangColorImage();
     void editTileProperties();
+    void swapLocation();
     void swapTiles();
     void setDrawGrid(bool drawGrid);
 

@@ -113,6 +113,7 @@ public:
     void setTileImage(Tile *tile, const QPixmap &image, const QUrl &source);
     void setTileProbability(Tile *tile, qreal probability);
     void swapTileObjectGroup(Tile *tile, std::unique_ptr<ObjectGroup> &objectGroup);
+    void swapTiles(Tile *tile1, Tile *tile2);
 
     void checkIssues() override;
 

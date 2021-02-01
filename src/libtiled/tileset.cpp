@@ -747,6 +747,14 @@ void Tileset::deleteTile(int id)
     delete mTiles.take(id);
 }
 
+void Tileset::swapTiles(int id1, int id2)
+{
+    Q_ASSERT(mTiles.contains(id1));
+    Q_ASSERT(mTiles.contains(id2));
+
+    std::swap(mTiles[id1], mTiles[id2]);
+}
+
 /**
  * Sets the \a image to be used for the tile with the given \a id.
  *

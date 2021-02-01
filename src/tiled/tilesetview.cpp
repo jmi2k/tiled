@@ -25,6 +25,7 @@
 #include "map.h"
 #include "preferences.h"
 #include "stylehelper.h"
+#include "swaptilelocation.h"
 #include "tile.h"
 #include "tileset.h"
 #include "tilesetdocument.h"
@@ -754,6 +755,9 @@ void TilesetView::contextMenuEvent(QContextMenuEvent *event)
     QIcon propIcon(QLatin1String(":images/16/document-properties.png"));
 
     if (tile) {
+        bool exactlyTwoTilesSelected =
+                (selectionModel()->selectedIndexes().size() == 2);
+
         if (mEditWangSet) {
             selectionModel()->setCurrentIndex(index,
                                               QItemSelectionModel::SelectCurrent |
@@ -772,13 +776,15 @@ void TilesetView::contextMenuEvent(QContextMenuEvent *event)
                                                      tr("Tile &Properties..."));
             Utils::setThemeIcon(tileProperties, "document-properties");
             connect(tileProperties, &QAction::triggered, this, &TilesetView::editTileProperties);
+
+            // Enable "position swap" if there are exactly 2 tiles selected
+            QAction *swapLocationAction = menu.addAction(tr("Swap &Location"));
+            swapLocationAction->setEnabled(exactlyTwoTilesSelected);
+            connect(swapLocationAction, &QAction::triggered, this, &TilesetView::swapLocation);
         } else {
             // Assuming we're used in the MapEditor
 
             // Enable "swap" if there are exactly 2 tiles selected
-            bool exactlyTwoTilesSelected =
-                    (selectionModel()->selectedIndexes().size() == 2);
-
             QAction *swapTilesAction = menu.addAction(tr("&Swap Tiles"));
             swapTilesAction->setEnabled(exactlyTwoTilesSelected);
             connect(swapTilesAction, &QAction::triggered, this, &TilesetView::swapTiles);
@@ -842,6 +848,24 @@ void TilesetView::editTileProperties()
 
     mTilesetDocument->setCurrentObject(tile);
     emit mTilesetDocument->editCurrentObject();
+}
+
+void TilesetView::swapLocation()
+{
+    const QModelIndexList selectedIndexes = selectionModel()->selectedIndexes();
+    if (selectedIndexes.size() != 2)
+        return;
+
+    const TilesetModel *model = tilesetModel();
+    TilesetDocument *document = tilesetDocument();
+    Tile *tile1 = model->tileAt(selectedIndexes[0]);
+    Tile *tile2 = model->tileAt(selectedIndexes[1]);
+
+    if (!tile1 || !tile2)
+        return;
+
+    QUndoStack *undoStack = document->undoStack();
+    undoStack->push(new SwapTileLocation(document, tile1, tile2));
 }
 
 void TilesetView::swapTiles()

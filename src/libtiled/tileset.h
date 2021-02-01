@@ -203,6 +203,7 @@ public:
     void addTiles(const QList<Tile*> &tiles);
     void removeTiles(const QList<Tile *> &tiles);
     void deleteTile(int id);
+    void swapTiles(int id1, int id2);
 
     void setNextTileId(int nextId);
     int nextTileId() const;
