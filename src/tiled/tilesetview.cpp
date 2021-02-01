@@ -481,6 +481,8 @@ void TilesetView::setEditWangSet(bool enabled)
 {
     if (mEditWangSet == enabled)
         return;
+    if (enabled)
+        mMoveTile = false;
 
     mEditWangSet = enabled;
     setMouseTracking(true);
@@ -640,6 +642,11 @@ void TilesetView::mouseMoveEvent(QMouseEvent *event)
         return;
     }
 
+    if (mMoveTile) {
+        /* TODO */
+        ;
+    }
+
     QTableView::mouseMoveEvent(event);
 }
 
@@ -655,6 +662,11 @@ void TilesetView::mouseReleaseEvent(QMouseEvent *event)
             finishWangIdChange();
 
         return;
+    }
+
+    if (mMoveTile) {
+        /* TODO */
+        ;
     }
 
     QTableView::mouseReleaseEvent(event);
@@ -768,9 +780,15 @@ void TilesetView::contextMenuEvent(QContextMenuEvent *event)
                 connect(setImage, &QAction::triggered, this, &TilesetView::selectWangColorImage);
             }
         } else if (mTilesetDocument) {
+            QAction *moveTile = menu.addAction(propIcon,
+                                                     tr("&Move Tile..."));
+            menu.addSeparator();
             QAction *tileProperties = menu.addAction(propIcon,
                                                      tr("Tile &Properties..."));
+            /* TODO */
+            Utils::setThemeIcon(moveTile, "document-properties");
             Utils::setThemeIcon(tileProperties, "document-properties");
+            connect(tileProperties, &QAction::triggered, this, &TilesetView::moveTile);
             connect(tileProperties, &QAction::triggered, this, &TilesetView::editTileProperties);
         } else {
             // Assuming we're used in the MapEditor
@@ -830,6 +848,19 @@ void TilesetView::selectWangColorImage()
 {
     if (Tile *tile = currentTile())
         emit wangColorImageSelected(tile, mWangColorIndex);
+}
+
+void TilesetView::moveTile()
+{
+    /* TODO */
+    Q_ASSERT(mTilesetDocument);
+
+    Tile *tile = currentTile();
+    if (!tile)
+        return;
+
+    mTilesetDocument->setCurrentObject(tile);
+    emit mTilesetDocument->editCurrentObject();
 }
 
 void TilesetView::editTileProperties()

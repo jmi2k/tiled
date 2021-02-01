@@ -125,6 +125,7 @@ private:
 
     void selectWangSetImage();
     void selectWangColorImage();
+    void moveTile();
     void editTileProperties();
     void swapTiles();
     void setDrawGrid(bool drawGrid);
@@ -153,6 +154,7 @@ private:
     bool mDrawGrid;
     bool mMarkAnimatedTiles = true;
     bool mEditWangSet = false;
+    bool mMoveTile = false;
     WrapBehavior mWrapBehavior = WrapDefault;
     WangBehavior mWangBehavior = AssignWholeId;
     WangSet *mWangSet = nullptr;
